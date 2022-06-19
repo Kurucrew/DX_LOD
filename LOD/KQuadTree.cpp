@@ -251,26 +251,31 @@ bool	KQuadTree::Render(ID3D11DeviceContext* pContext, DebugCamera* m_pCamera)
 	}
 	for (int iNode = 0; iNode < m_LeafList.size(); iNode++)
 	{
+		//LOD의 균열을 방지하기 위해 이웃 삼각형을 분할
 		int iRenderCode = 0;
 		// 동서남북
 		if (m_LeafList[iNode]->m_NeighborList[0] &&
 			m_LeafList[iNode]->m_LodLevel < m_LeafList[iNode]->m_NeighborList[0]->m_LodLevel)
 		{
+			//우측
 			iRenderCode += 2;
 		}
 		if (m_LeafList[iNode]->m_NeighborList[1] &&
 			m_LeafList[iNode]->m_LodLevel < m_LeafList[iNode]->m_NeighborList[1]->m_LodLevel)
 		{
+			//좌측
 			iRenderCode += 8;
 		}
 		if (m_LeafList[iNode]->m_NeighborList[2] &&
 			m_LeafList[iNode]->m_LodLevel < m_LeafList[iNode]->m_NeighborList[2]->m_LodLevel)
 		{
+			//하단
 			iRenderCode += 4;
 		}
 		if (m_LeafList[iNode]->m_NeighborList[3] &&
 			m_LeafList[iNode]->m_LodLevel < m_LeafList[iNode]->m_NeighborList[3]->m_LodLevel)
 		{
+			//상단
 			iRenderCode += 1;
 		}
 

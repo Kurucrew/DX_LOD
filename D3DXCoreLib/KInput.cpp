@@ -1,11 +1,13 @@
 #include "KInput.h"
 void KInput::OnMove(int ix, int iy)
 {
-    if (m_bDrag)
+    if (m_bDrag)//마우스가 드래그 중일때
     {
+        //입력받은 위치에서 드래그 시작지점만큼 뺀 위치를 드래그 위치로 설정 
         m_pDrag.x = ix - m_pDragDown.x;
         m_pDrag.y = iy - m_pDragDown.y;
     }
+    //입력받은 위치를 드래그 시작위치로 설정
     m_pDragDown.x = ix;
     m_pDragDown.y = iy;
 
@@ -30,31 +32,25 @@ void KInput::OnEnd()
 }
 LRESULT KInput::MsgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    //마우스의 위치값을 받아옴
     int iMouseX = (short)LOWORD(lParam);
     int iMouseY = (short)HIWORD(lParam);
-    switch (message)
+    switch (message)//마우스의 상태에 따라 그에 맞는 함수 실행
     {
     case  WM_MOUSEMOVE:
-        OnMove(iMouseX, iMouseY);
+        OnMove(iMouseX, iMouseY);//드래그를 한 상태로 마우스 이동
 
         return true;
     case WM_LBUTTONDOWN:
         SetCapture(g_hWnd);
-        OnBegin(iMouseX, iMouseY);
+        OnBegin(iMouseX, iMouseY);//마우스 드래그 시작
 
         return true;
     case WM_LBUTTONUP:
         ReleaseCapture();
-        OnEnd();
+        OnEnd();//마우스 드래그 종료
 
         return true;
-    case WM_MOUSEWHEEL:
-    {
-        m_iWheel = 0;
-        m_iWheel = GET_WHEEL_DELTA_WPARAM(wParam);
-
-        return 0;
-    }
     }
 
     return 0;
